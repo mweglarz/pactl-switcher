@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"github.com/mweglarz/pactl-switcher/switcher"
+	"os"
+)
 
 func main() {
-	fmt.Println("vim-go")
+	switcher.RunPactlSwitcherApp(os.Args)
 }
