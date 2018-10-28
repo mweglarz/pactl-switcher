@@ -21,11 +21,11 @@ func (self *PactlParser) Parse(reader io.Reader) (sinks []SinkInput, err error) 
 
 	scanner := bufio.NewScanner(reader)
 
+	var id int = -1
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		fmt.Println("line", line)
-
-		var id int = -1
 
 		if strings.Contains(line, "Sink Input") {
 			idSplit := strings.Split(line, "#")
