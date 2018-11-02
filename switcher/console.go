@@ -38,17 +38,20 @@ func run(c *cli.Context) error {
 	}
 
 	if c.GlobalIsSet("sink") {
+		fmt.Println("sink is set")
 		sinkId := c.GlobalInt("sink")
 		switcher := NewSwitcher()
 
 		if c.GlobalIsSet("input") {
+			fmt.Println("input is set")
 			inputId := c.GlobalInt("input")
 			switcher.SwitchInputToSink(inputId, sinkId)
 			return nil
 
 		} else {
-			switcher.SwitchAllToSink(sinkId)
-			return nil
+			fmt.Println("input is not set")
+			err := switcher.SwitchAllToSink(sinkId)
+			return err
 		}
 	}
 

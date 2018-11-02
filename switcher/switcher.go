@@ -1,22 +1,24 @@
 package switcher
 
 import (
-	"os/exec"
-	"strconv"
+	"fmt"
 )
 
 type Switcher struct {
+	pactlCommand *PactlCommand
 }
 
 func NewSwitcher() *Switcher {
-	return &Switcher{}
+	return &Switcher{NewPactlCommand()}
 }
 
 func (self *Switcher) SwitchAllToSink(sinkId int) error {
-	inputs, err := self.getAllInputs()
+	fmt.Println("SwitchAllToSink")
+	inputs, err := self.pactlCommand.ListInputs()
 	if err != nil {
 		return err
 	}
+	fmt.Printf("inputs = %+v\n", inputs)
 
 	var batchErr error
 	for _, inputId := range inputs {
@@ -29,15 +31,5 @@ func (self *Switcher) SwitchAllToSink(sinkId int) error {
 }
 
 func (self *Switcher) SwitchInputToSink(inputId int, sinkId int) error {
-
-	args := []string{"move-sink-input", strconv.Itoa(inputId), strconv.Itoa(sinkId)}
-
-	cmd := exec.Command("pactl", args...)
-	err := cmd.Run()
-	return err
-}
-
-func (self *Switcher) getAllInputs() ([]int, error) {
-
-	return nil, nil
+	return self.pactlCommand.MoveInput(inputId, sinkId)
 }
