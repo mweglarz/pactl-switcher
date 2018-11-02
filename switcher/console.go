@@ -2,8 +2,6 @@ package switcher
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/urfave/cli"
 )
 
@@ -26,54 +24,49 @@ func RunPactlSwitcherApp(args []string) {
 }
 
 func run(c *cli.Context) error {
+	if c.GlobalIsSet("list") {
+		pactl := NewPactlCommand()
+		inputs, err := pactl.ListInputs()
 
-	if c.GlobalIsSet("data") {
-		parser := NewParser()
-		inputs, err := parser.Parse(os.Stdin)
 		for _, sinkInput := range inputs {
-			// TODO: json annotation and auto marshall
-			fmt.Printf("%d: %s\n", sinkInput.Id, sinkInput.Name)
+			// TODO: add json annotation
+			sinkInput.Print()
 		}
 		return err
 	}
 
 	if c.GlobalIsSet("sink") {
-		fmt.Println("sink is set")
 		sinkId := c.GlobalInt("sink")
 		switcher := NewSwitcher()
 
 		if c.GlobalIsSet("input") {
-			fmt.Println("input is set")
 			inputId := c.GlobalInt("input")
 			switcher.SwitchInputToSink(inputId, sinkId)
 			return nil
 
 		} else {
-			fmt.Println("input is not set")
 			err := switcher.SwitchAllToSink(sinkId)
 			return err
 		}
 	}
 
-	return nil
+	return fmt.Errorf("Unknown option")
 }
 
 func generateFlags() []cli.Flag {
 
 	return []cli.Flag{
 		cli.BoolFlag{
-			Name:  "data, d",
-			Usage: "if true reads pactl data from stdin",
+			Name:  "list, l",
+			Usage: "if true prints input list",
 		},
 		cli.IntFlag{
 			Name:  "sink, s",
 			Usage: "pactl sink to move to",
-			Value: -1,
 		},
 		cli.IntFlag{
 			Name:  "input, i",
 			Usage: "pactl input id",
-			Value: -1,
 		},
 	}
 }

@@ -19,7 +19,7 @@ func (self *PactlCommand) RawInputs() (string, error) {
 	return string(out), err
 }
 
-func (self *PactlCommand) ListSinks() ([]SinkInput, error) {
+func (self *PactlCommand) ListInputs() ([]SinkInput, error) {
 	rawInput, err := self.RawInputs()
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (self *PactlCommand) ListSinks() ([]SinkInput, error) {
 	return parser.Parse(reader)
 }
 
-func (self *PactlCommand) ListInputs() ([]int, error) {
+func (self *PactlCommand) ListSinks() ([]int, error) {
 
 	return nil, nil
 }

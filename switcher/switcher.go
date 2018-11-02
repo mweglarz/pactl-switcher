@@ -1,8 +1,6 @@
 package switcher
 
-import (
-	"fmt"
-)
+import "fmt"
 
 type Switcher struct {
 	pactlCommand *PactlCommand
@@ -13,17 +11,16 @@ func NewSwitcher() *Switcher {
 }
 
 func (self *Switcher) SwitchAllToSink(sinkId int) error {
-	fmt.Println("SwitchAllToSink")
 	inputs, err := self.pactlCommand.ListInputs()
 	if err != nil {
 		return err
 	}
-	fmt.Printf("inputs = %+v\n", inputs)
 
 	var batchErr error
 	for _, inputId := range inputs {
-		err := self.SwitchInputToSink(inputId, sinkId)
+		err := self.SwitchInputToSink(inputId.Id, sinkId)
 		if err != nil {
+			fmt.Println("switching error", err)
 			batchErr = err
 		}
 	}
