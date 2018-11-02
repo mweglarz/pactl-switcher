@@ -28,10 +28,12 @@ func RunPactlSwitcherApp(args []string) {
 func run(c *cli.Context) error {
 
 	if c.GlobalIsSet("data") {
-		fmt.Println("data set, reading from stdin")
 		parser := NewParser()
 		inputs, err := parser.Parse(os.Stdin)
-		fmt.Println("inputs", inputs)
+		for _, sinkInput := range inputs {
+			// TODO: json annotation and auto marshall
+			fmt.Printf("%d: %s\n", sinkInput.Id, sinkInput.Name)
+		}
 		return err
 	}
 

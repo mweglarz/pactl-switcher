@@ -2,11 +2,15 @@ package switcher
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"strconv"
 	"strings"
 )
+
+type SinkInput struct {
+	Id   int
+	Name string
+}
 
 type PactlParser struct {
 }
@@ -16,16 +20,12 @@ func NewParser() *PactlParser {
 }
 
 func (self *PactlParser) Parse(reader io.Reader) (sinks []SinkInput, err error) {
-
-	// bufferedReader := bufio.NewReader(reader)
-
 	scanner := bufio.NewScanner(reader)
 
 	var id int = -1
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println("line", line)
 
 		if strings.Contains(line, "Sink Input") {
 			idSplit := strings.Split(line, "#")
